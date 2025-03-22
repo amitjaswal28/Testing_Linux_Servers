@@ -1,0 +1,24 @@
+Objective: Configure automated backups for Sarah’s Apache server and Mike’s Nginx server to ensure data integrity and recovery.
+
+Create Backup Directories:
+sudo mkdir /backups/
+
+Create Backup Script:
+sudo nano /usr/local/bin/backup_script.sh
+
+#!/bin/bash
+BACKUP_DATE=$(date +%F)
+tar -czf /backups/apache_backup_$BACKUP_DATE.tar.gz /etc/httpd/ /var/www/html/
+tar -czf /backups/nginx_backup_$BACKUP_DATE.tar.gz /etc/nginx/ /usr/share/nginx/html/
+echo "$(date) - Backup Successful" >> /var/log/last_backup.log
+
+Make the Script Executable:
+sudo chmod +x /usr/local/bin/backup_script.sh
+
+Schedule Backup with Cron:
+echo "0 0 * * 2 /usr/local/bin/backup_script.sh" | sudo tee -a /etc/crontab
+
+Verify Backup Integrity:
+sudo bash -c 'tar -tzf /backups/apache_backup_$(date +%F).tar.g
+z > /var/log/backup_verification.log'
+amit@Amit:/$ sudo bash -c 'tar -tzf /backups/nginx_backup_$(date +%F).tar.gz >> /var/log/backup_verification.log'

@@ -1,0 +1,17 @@
+Objective: Configure a monitoring system to ensure the development environment’s health, performance, and capacity planning.
+
+steps :
+Install htop and nmon for monitoring CPU, memory, and processes:
+sudo apt install htop nmon -y
+
+Schedule a cron job to log disk usage daily:
+echo "0 0 * * * df -h >> /var/log/disk_usage.log" | sudo tee -a /etc/crontab
+
+Monitor directory sizes using du:
+du -sh /home/* >> /var/log/directory_usage.log
+
+Use ps and head to identify resource-intensive processes:
+ps aux | head -n 10 >> /var/log/process_monitor.log
+
+Store all monitoring logs in /var/log/system_monitor/ for review.
+mkdir -p /var/log/system_monitor

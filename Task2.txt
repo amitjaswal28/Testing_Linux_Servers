@@ -1,0 +1,23 @@
+Objective: Set up user accounts and configure secure access controls for the new developers
+
+Add users with secure passwords:
+sudo useradd -m -s /bin/bash sarah
+sudo useradd -m -s /bin/bash mike
+echo "sarah:sarah@1234" | sudo chpasswd
+echo "mike:mike@1234" | sudo chpasswd
+
+Create workspace directories:
+mkdir -p /home/sarah/workspace
+mkdir -p /home/mike/workspace
+
+Set permissions to restrict access:
+chown sarah:sarah /home/sarah/workspace
+chown mike:mike /home/mike/workspace
+chmod 700 /home/sarah/workspace
+chmod 700 /home/mike/workspace
+
+Enforce password expiration and complexity:
+sudo apt install libpam-pwquality -y  (libpam-pwquality: Enforces password strength)
+sudo sed -i 's/# minlen = 8/minlen = 12/' /etc/security/pwquality.conf
+sudo chage -M 30 sarah (Forces password change every 30 days)
+sudo chage -M 30 mike
